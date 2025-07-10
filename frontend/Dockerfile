@@ -1,22 +1,24 @@
-FROM node:22-alpine
+FROM node:22 AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
 COPY package.json yarn.lock* package-lock.json* ./
 RUN if [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
     elif [ -f package-lock.json ]; then npm ci; \
     else echo "Lockfile not found." && exit 1; fi
 
-# Copy application code
 COPY . .
-
-# Build the app
 RUN npm run build
 
-# Expose port
-EXPOSE 3000
+FROM node:22-slim AS runner
 
-# Start the app
-CMD ["npm", "run", "dev"]
+WORKDIR /app
+
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/.next .next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
+
+ENV NODE_ENV=production
+EXPOSE 3000
+CMD ["npm", "start"]

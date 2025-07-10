@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import { Title } from "@mantine/core";
+import { Title } from '@mantine/core'
 
 export default function Home() {
   return (
@@ -9,5 +9,5 @@ export default function Home() {
         Welcome to K12 R&D
       </Title>
     </main>
-  );
+  )
 }

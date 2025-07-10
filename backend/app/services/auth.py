@@ -1,5 +1,4 @@
-from datetime import datetime, timedelta
-from datetime import timezone
+from datetime import UTC, datetime, timedelta
 
 from fastapi.security import OAuth2PasswordBearer
 from fastcrud.exceptions.http_exceptions import UnauthorizedException
